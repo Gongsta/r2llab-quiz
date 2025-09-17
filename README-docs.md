@@ -4,8 +4,17 @@
 - `dense_retrieval.py`: Implements the dense retrieval algorithm
 - `evaluation.py`: Evaluates the retrieval systems
 
+## Geting Started
+Set up a virtual environment and install the dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+Note that this installs the `faiss-cpu` package, which is a CPU-only version of the `faiss` library. If you want to use the GPU version, refer to the [faiss documentation](https://github.com/facebookresearch/faiss/blob/main/INSTALL.md).
+
+
 ## Results
-Sparse Retrieval:
+Sparse Retrieval (BM25):
 ```
 Evaluation Scores:
 [
@@ -28,7 +37,7 @@ Evaluation Scores:
 ]
 ```
 
-Dense Retrieval:
+Dense Retrieval (DPR):
 ```
 Evaluation Scores:
 [
@@ -52,5 +61,8 @@ Evaluation Scores:
 ```
 
 ### Results Analysis
-- The sparse retrieval system (BM25) has a slightly higher NDCG and MAP score, indicating that it is able to retrieve the most relevant documents at the top (better ranking quality)
-- However, the dense retrieval system (DPR) has a higher recall and precision score, indicating that it is able to retrieve more relevant documents overall (better retrieval coverage)
+- Ranking quality: The sparse retrieval system (BM25) has a slightly higher NDCG and MAP score, indicating that it is able to retrieve the most relevant documents at the top
+- Precision and recall (retrieval coverage): The dense retrieval system (DPR) has a higher recall and precision score, indicating that it is able to retrieve more relevant documents overall
+- Speed: BM25 is much faster since it doesn't use a pre-trained LM as the encoder unlike DPR.
+- Memory: DPR required additional memory to store a dense matrix of embeddings (dim=384 per document), plus transient memory while encoding; BM25’s indices are light because they use
+sparse vectors (inverted indices). At larger scales, DPR’s memory grows linearly with corpus size × embedding dim.
